@@ -1,7 +1,7 @@
 """I'm just messing with how I could indicate that all variables should
 be made into properties (so no one has to type in all that cruft).
 
-I don't think this is practical - there isn't really a point to using 
+I don't think this is practical - there isn't really a point to using
 properties unless there is non-trivial logic for get/set/delete, and
 non-trivial logic isn't something this can handle (or if it did it wouldn't
 be readable, and that is sort of pointless.
@@ -26,8 +26,8 @@ def make_all_properties(class_):
     def propertify(*args, **kwargs):
         #print class_, "Inside the wrapped class"
         d={}
-        for truth, iterator in itertools.groupby(vars(class_).iteritems(), 
-                                                 lambda x: 
+        for truth, iterator in itertools.groupby(vars(class_).iteritems(),
+                                                 lambda x:
                                                     isinstance(x[1], property)):
             if truth in d:
                 d[truth].update(dict(list(iterator)))
@@ -38,10 +38,10 @@ def make_all_properties(class_):
         return instance
     #print class_
     return propertify
-    
-    
+
+
 class test_metaclass(type):
-    
+
     @classmethod
     def __new__(cls, *args):
         properties = {}
@@ -52,7 +52,7 @@ class test_metaclass(type):
                     properties[k] = v
                 else:
                     attributes[k] = v
-        
+
         for key, attr in attributes.iteritems():
             if key.startswith('__'):
                 pass
@@ -62,29 +62,30 @@ class test_metaclass(type):
             else:
                 if key in properties:
                     pass
-                    
-        print attributes
-        print properties
+
+        #print attributes
+        #print properties
         return super(test_metaclass, cls).__new__(*args)
-    
+
 
 @make_all_properties
 class a(object):
     b=3
     _c=0
-    
-    
+
+
     __metaclass__ = test_metaclass
-    
+
     def __init__(self):
         self.b = 6
-        
+
     @property
     def c(self):
         return self._c
-        
+
     @c.setter
     def c(self, other):
         self._c = other
-        
-a()
+
+if __name__ == '__main__':
+    a()

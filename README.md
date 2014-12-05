@@ -17,7 +17,7 @@ Index:
   This just converts space-delimited text files to comma delimited csv files. Much nicer than doing it by hand
 
 - **docstring_checker.py**
-  Playing around with an easy tool to check which functions and classes I haven't yet written docstrings for (or have forgotten to write docstrings for).  Could use a lot of work
+  Tool that checks which non-private functions and classes I've written that don't have docstrings.
 
 - **import_finder.py**
   The idea was to use this in conjunction with `docstring_checker` to check imported modules as well (but not check python builtins).  Could use a lot of work
