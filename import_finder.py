@@ -5,11 +5,11 @@ from itertools import imap as imp
 
 
 matchers = map(re.compile, [r"from[ ][^ ]*[ ]import[ ][^ ]*",
-                                r"from[ ][^ ]*[ ]import[ ][^ ]*[ ]as[ ]*",
-                                r"import[ ][^ ]*",
-                                r"import[ ][^ ]*[ ]as[ ]*",
-                                r"[^ ]*[ ]=[ ]__import__\('[^']*'\)",
-                                r"importlib.import_module\([^)]*\)"])
+                            r"from[ ][^ ]*[ ]import[ ][^ ]*[ ]as[ ]*",
+                            r"import[ ][^ ]*",
+                            r"import[ ][^ ]*[ ]as[ ]*",
+                            r"[^ ]*[ ]=[ ]__import__\('[^']*'\)",
+                            r"importlib.import_module\([^)]*\)"])
                                 
                                 
 def find_imports(afile):

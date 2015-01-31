@@ -22,5 +22,5 @@ Index:
 - **import_finder.py**
   The idea was to use this in conjunction with `docstring_checker` to check imported modules as well (but not check python builtins).  Could use a lot of work
 
-- **property_fun.py**
-  I thought it would be interesting to play around with metaclasses and properties.  I want to add either decorators or metaclasses (or both) that give me the ability to turn every attribute of a class into a property at runtime, so no one has to type in all that cruft.  This isn't particularly useful - there is no reason to make something into a property (that I can think of) unless it has non-trivial set/get/delete behavior.  Needs work
+- **replace_stdout.py**
+  Uses a context manager to temporarily replace stdout/stderr with whatever I want to write to instead.

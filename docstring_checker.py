@@ -1,6 +1,9 @@
+"""This module servers to locate and identify pyhon modules, classes, and
+functions that do not currently have docstrings.
+"""
+
 import inspect
 import importlib
-import os
 import sys
 
 
@@ -106,63 +109,40 @@ def check_docstrings(obj, ignore_private=True, ignore_magic=True,):
     return set(need_docstrings)
 
 
-def get_module(filepath):
-    sys.path.insert(0, '')
-    filepath = os.path.basename(os.path.abspath(filepath))
-    original_directory = os.getcwd()
-    try:
-        path = os.path.dirname(filepath)
-        sys.path[0] = path
-        filename, _, _ = filepath.partition('.')
-    except (WindowsError, IOError) as e:
-        return
-    else:
-        try:
-            ret_module = __import__(filename)
-        except ImportError:
-            raise ImportError("No module {} at {}".format(filename, path))
-        else:
-            return ret_module
-        finally:
-            os.chdir(original_directory)
-            del sys.path[0]
+def get_module(module_name, package=None, path=None):
+    """Gets a python module from a specific location.
 
-        
-def check_package_docstrings(package_dir):
-    if os.path.isdir(package_dir):
-        dir_name = os.path.abspath(package_dir)
-    else:
-        dir_name = os.path.dirname(os.path.abspath(package_dir))
-        
-    for file_ in os.listdir(dir_name):
-        if not file_.startswith('.'):
-            if os.path.isdir(file_):
-                check_package_docstrings(file_)
-            else:
-                if file_.endswith('.py'):
-                    logging.info(os.path.abspath(file_))
-                    check_docstrings(get_module(file_))
+    Parameters
+    ----------
+    module_name : string
+        The name of the module to be imported
+    package : string, optional
+        The package from which the module should be imported
+    path : string, optional
+        The path to the package/module, assuming that the package/module is not
+        already on sys.path.
 
+    Returns
+    -------
+    module
+        The python module that was imported by `importlib.import_module`
 
-if __name__ == '__main__':
-    import argparse
-    
-    parser = argparse.ArgumentParser(
-        description="Checks docstrings of modules/packages")
-    parser.add_argument('-f', '--filename', dest='filename',
-                        default=__file__, help="name of the file to check")
-    parser.add_argument('-p', '--package', dest='package',
-                        default=False, action='store_true',
-                        help="Check the whole package")       
-    parser.add_argument('-l', '--logfile', dest='logfile',
-                        default='logging.log', 
-                        help="Name of the desired output log file")
-                        
-    args = parser.parse_args()
+    Raises
+    ------
+    ImportError
+        Raised when some part of the import process fails.  Generally caused by
+        an error with the path or package.
 
-    logging.basicConfig(filename=args.logfile)
-    if args.package:
-        check_package_docstrings(
-                os.path.dirname(os.path.abspath(args.filename)))
-    else:
-        check_docstrings(get_module(args.filename))
+    Notes
+    -----
+    This function is a wrapper for the `importlib.import_module` function that
+    adds support for adjusting sys.path.  Errors can likely be resolved by
+    examining the documentation[1]_ for that function.
+
+    .. [1][https://docs.python.org/2.7/library/importlib.html]
+    """
+
+    if path is not None:
+        sys.path.insert(0, path)
+
+    return importlib.import_module(module_name, package=package)

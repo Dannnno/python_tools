@@ -2,8 +2,22 @@ import os
 import io
 
 
-four = '    '
-two = '  '
+def _n_spaces(n):
+    """Returns a string of n-spaces.
+
+    Parameters
+    ----------
+    n : int
+        The number of spaces to be returned.
+
+    Returns
+    -------
+    string
+        The string of n spaces.
+    """
+
+    return int(n) * ' '
+
 _filetypes = ['py']
 _visited = []
 
@@ -41,7 +55,7 @@ def clean_file(filename, size):
             f.write(unicode('\n'))
 
 
-def strip_whitespace(size=four):
+def strip_whitespace(size=_n_spaces(4)):
     for file_ in get_files():
         clean_file(file_, size)
 
@@ -50,12 +64,14 @@ if __name__ == '__main__':
     import argparse
 
     parser = argparse.ArgumentParser(
-                        description="Cleans up the whitespace of files")
-    parser.add_argument('-f', '--filetypes', metavar='f', nargs='+', default=[],
-                        help="file extensions of filetypes to be cleaned")
+        description="Cleans up the whitespace of files")
     parser.add_argument(
-            '-s', '--size', default=four, action='store_const', const=two,
-            help='Use if you want tabs replaced by 2 spaces not 4')
+        '-f', '--filetypes', metavar='f', nargs='+', default=[],
+        help="file extensions of filetypes to be cleaned")
+    parser.add_argument(
+        '-s', '--size', default=_n_spaces(4), action='store_const',
+        const=_n_spaces(2),
+        help='Use if you want tabs replaced by 2 spaces not 4')
 
     args = parser.parse_args()
     if args.filetypes:

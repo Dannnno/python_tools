@@ -1,5 +1,3 @@
-import importlib
-
 from . import docstring_checker
 
 
@@ -100,3 +98,16 @@ class TestModuleDocstrings(object):
         need = docstring_checker.check_docstrings(self.module)
         print need
         assert need == {'tests.sample_module', 'A', 'f'}
+
+
+class TestGetModule(object):
+
+    def test_one(self):
+        import os
+        import types
+
+        path = os.getcwd()
+        package = None
+        file_ = "import_finder"
+        module = docstring_checker.get_module(file_, package=package, path=path)
+        assert isinstance(module, types.ModuleType)
